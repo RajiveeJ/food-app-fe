@@ -1,5 +1,7 @@
 const env = {
-    apiurl:"https://fsdbe.herokuapp.com"
+    apiurl:"http://localhost:8000"
 }
 
 export default env;
+
+

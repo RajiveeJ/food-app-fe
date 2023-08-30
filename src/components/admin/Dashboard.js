@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import AdminNav from 'AdminNav'
+import AdminNav from './AdminNav'
 import axios from 'axios'
 import Table from 'react-bootstrap/Table';
-import env from '../../enviroinment'
+import env from '../../environment'
 import {useNavigate} from 'react-router-dom'
 
 function Dashboard() {
@@ -27,6 +27,7 @@ function Dashboard() {
 
   useEffect(()=>{
     loadData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
   return  <>
   <AdminNav/>

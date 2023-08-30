@@ -2,7 +2,7 @@ import React,{useState} from 'react'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios'
-import env from '../../enviroinment'
+import env from '../../environment'
 import {useNavigate} from 'react-router-dom'
 import Spinner from 'react-bootstrap/Spinner';
 
@@ -24,11 +24,13 @@ function Login() {
         setToggle(false)
        sessionStorage.setItem('token',res.data.token)
        sessionStorage.setItem('role',res.data.role)
-       sessionStorage.setItem('userId',res.data.userId)
-       if(res.data.role==="admin")
-          navigate('/dashboard')
-       else
-          navigate('/user-menu')   
+       if(res.data.role==='admin'){
+        navigate('/dashboard')
+       }
+       else{
+        navigate('/user-menu')
+       }
+       
     }
     else
     {
@@ -36,8 +38,6 @@ function Login() {
       setMessage(res.data.message)
       setTimeout(()=>{
         setMessage("")
-        setEmail("")
-        setPassword("")
       },3000)
 
     }
@@ -51,12 +51,12 @@ function Login() {
       <Form>
         <Form.Group className="mb-3">
           <Form.Label>Email address</Form.Label>
-          <Form.Control type="email" value={email} placeholder="Enter email" onChange={(e)=>setEmail(e.target.value)}/>
+          <Form.Control type="email" placeholder="Enter email" onChange={(e)=>setEmail(e.target.value)}/>
         </Form.Group>
 
         <Form.Group className="mb-3">
           <Form.Label>Password</Form.Label>
-          <Form.Control type="password" value={password} placeholder="Password" onChange={(e)=>setPassword(e.target.value)}/>
+          <Form.Control type="password" placeholder="Password" onChange={(e)=>setPassword(e.target.value)}/>
         </Form.Group>
 
         <Button variant="primary" onClick={()=>handleLogin()}>

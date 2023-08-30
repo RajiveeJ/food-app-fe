@@ -3,7 +3,7 @@ import TopBar from './TopBar'
 import Button from 'react-bootstrap/Button';
 // import Table from 'react-bootstrap/Table';
 import axios from 'axios'
-import env from '../../enviroinment'
+import env from '../../environment'
 import {useNavigate} from 'react-router-dom'
 import {CartContext} from '../../App';
 
@@ -36,6 +36,7 @@ function Food() {
   }
   useEffect(()=>{
     loadData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   return <>

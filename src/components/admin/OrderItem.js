@@ -1,109 +1,69 @@
-import React,{useState,useEffect}from 'react'
-import AdminNav from 'AdminNav'
+import React,{useEffect, useState} from 'react'
+import AdminNav from './AdminNav'
+import {useParams,useNavigate} from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-// import Table from 'react-bootstrap/Table';
+import env from '../../environment'
 import axios from 'axios'
-import env from '../../enviroinment'
-import {useNavigate} from 'react-router-dom'
-
-function FoodManagement() {
-let [name,setName] = useState("")
-let [price,setPrice] = useState("")
-let [description,setDescription] = useState("")
-let [imageUrl,setImageUrl] = useState("")
-let img = "https://via.placeholder.com/150"
-let navigate = useNavigate()
-
-let [data,setData] = useState([])
 
 
-let handleDelete = async (id)=>{
-  let token = sessionStorage.getItem('token')
-  let res = await axios.delete(`${env.apiurl}/delete-food/${id}`,
-  {
-    headers:{"Authorization":`Bearer ${token}`}
+function OrderItem() {
+  let [data,setData] = useState([])
+  let [orderAmount,setOrderAmount] = useState(0)
+  let [contact,setContact] = useState("")
+  let [deliveryAddress,setDeliveryAddress] = useState("")
+  let [status,setStatus]=useState("")
+  let navigate = useNavigate()
+  let params = useParams()
+  let img = "https://via.placeholder.com/150"
+  let loadData = async()=>{
+    let token = sessionStorage.getItem('token')
+    let res = await axios.get(`${env.apiurl}/orders/${params.id}`,
+    {
+      headers:{"Authorization":`Bearer ${token}`}
+    })
+    if(res.data.statusCode===200)
+    {
+      setData(res.data.order.orderItems)
+      setOrderAmount(res.data.order.orderAmount)
+      setContact(res.data.order.contact)
+      setDeliveryAddress(res.data.order.deliveryAddress)
+      setStatus(res.data.order.status)
+    }
   }
-  )
-  if(res.data.statusCode===200)
-  {
-    loadData()
+
+  let changeStatus = async()=>{
+    let token = sessionStorage.getItem('token')
+    let res = await axios.put(`${env.apiurl}/order-status/${params.id}`,{},
+    {
+      headers:{"Authorization":`Bearer ${token}`}
+    })
+    if(res.data.statusCode===200)
+      loadData()
   }
-}
 
-let loadData = async()=>{
-  let token = sessionStorage.getItem('token')
-  let res = await axios.get(`${env.apiurl}/all-food`,
-  {
-    headers:{"Authorization":`Bearer ${token}`}
-  })
-  if(res.data.statusCode===200)
-  {
-    setData(res.data.food)
-  }
-}
-
-let handleSubmit = async ()=>{
-  let token = sessionStorage.getItem('token')
-  let res = await axios.post(`${env.apiurl}/add-food`,
-  {
-    name,
-    price:Number(price),
-    description,
-    imageUrl
-  },
-  {
-    headers:{"Authorization":`Bearer ${token}`}
-  })
-
-  if(res.data.statusCode===200)
-  {
-    setName("")
-    setPrice("")
-    setDescription("")
-    setImageUrl("")
-    loadData()
-  }
-  else if(res.data.statusCode===401)
-  {
-    sessionStorage.clear()
-    navigate('/login')
-  }
-}
-
-useEffect(()=>{
-  loadData()
-},[])
-return  <>
-<AdminNav/>
-<div> 
-    <div className='add-food-wrapper col-4'>
-      <h3 >Add your Food here!</h3>
-    <Form>
-    <Form.Group className="mb-3" >
-      <Form.Control type="text" value={name} placeholder="Food Name" onChange={(e)=>{setName(e.target.value)}}/>
-    </Form.Group>
-
-    <Form.Group className="mb-3">
-      <Form.Control type="text" value={price} placeholder="Price" onChange={(e)=>{setPrice(e.target.value)}}/>
-    </Form.Group>
+  useEffect(()=>{
+    if(params.id)
+    {
+      loadData()
     
-    <Form.Group className="mb-3">
-      <Form.Control type="text" value={description} placeholder="Description" onChange={(e)=>{setDescription(e.target.value)}}/>
-    </Form.Group>
-    
-    <Form.Group className="mb-3">
-      <Form.Control type="text" value={imageUrl} placeholder="Image Url" onChange={(e)=>{setImageUrl(e.target.value)}}/>
-    </Form.Group>
-
-    <Button variant="primary" onClick={()=>handleSubmit()}>
-      Submit
-    </Button>
-  </Form>
-
-    </div>
-    <div className='list-food-wrapper'>
+    }
+    else
+    {
+      navigate('/dashboard')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
+  return <>
+  <AdminNav/>
+  <div> 
+  <div>
+  <div className='list-food-wrapper'>
         <h2>All your Added Foods are here!</h2>
+       <div>
+       <h3>&#8377; {orderAmount}</h3> 
+    <h4>{deliveryAddress}</h4>
+    <h4>{contact}</h4>
+       </div>
         {
           data.map((e,i)=>{
             return <div className='card-wrapper ' key={i}>
@@ -114,14 +74,23 @@ return  <>
                 <h2>{e.name}</h2>
                 <h4>&#8377; {e.price}</h4>
                 <div>{e.description}</div>
-                <div><Button onClick={()=>handleDelete(e._id)} variant='danger'>Delete</Button></div>
               </div>
             </div>
           })
-        }
+        }<div>
+          { 
+            status==="Ordered"?
+            <Button onClick={()=>changeStatus()} variant='danger'>Accept </Button>:status==="Placed"?
+            <Button onClick={()=>changeStatus()} variant='warning'>Ship Order </Button>:status==="In-Transit"?
+            <Button onClick={()=>changeStatus()} variant='success'>Delivered </Button>:<></>
+          }
+       
+        </div>
     </div>
-</div>
-</>
+    
+  </div>
+  </div>
+  </>
 }
 
-export default FoodManagement
+export default OrderItem

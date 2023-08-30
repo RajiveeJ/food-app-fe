@@ -1,6 +1,6 @@
 import React, { useEffect,useState,useContext } from 'react'
 import axios from 'axios'
-import env from '../../enviroinment'
+import env from '../../environment'
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import TopBar from './TopBar'
@@ -12,7 +12,7 @@ function Cart() {
   let [total,setTotal]=useState(0)
   let [deliveryAddress,setDeliveryAddress] = useState("")
   let [contact,setContact] = useState("")
-  let userId = sessionStorage.getItem('userId');
+  
 
   let navigate = useNavigate();
 
@@ -27,7 +27,6 @@ function Cart() {
     let res = await axios.post(`${env.apiurl}/order`,
     {
       orderItems:context.cart,
-      userId,
       deliveryAddress,
       orderAmount:total,
       contact
