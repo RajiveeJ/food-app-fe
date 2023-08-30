@@ -1,5 +1,5 @@
 const env = {
-    apiurl:"https://foodappbe.netlify.app"
+    apiurl:"http://localhost:8000"
 }
 
 export default env;
