@@ -9,7 +9,7 @@ function AdminNav() {
   return <>
       <Navbar bg="primary" variant="dark">
         <Container>
-          <Navbar.Brand href="javascript(void)">FoodApp</Navbar.Brand>
+          <Navbar.Brand href="/">FoodApp</Navbar.Brand>
           <Nav className="me-auto">
             <Nav.Link onClick={()=>navigate('/dashboard')}>Dashboard</Nav.Link>
             <Nav.Link onClick={()=>navigate('/food-management')}>Food Management</Nav.Link>
