@@ -8,7 +8,7 @@ function TopBar(props) {
   return <>
   <Navbar bg="primary" variant="dark">
     <Container>
-      <Navbar.Brand href="javascript(void)">FoodApp</Navbar.Brand>
+      <Navbar.Brand href="/">FoodApp</Navbar.Brand>
       <Nav className="me-auto">
         <Nav.Link onClick={()=>navigate('/user-menu')}>Home</Nav.Link>
         <Nav.Link onClick={()=>navigate('/user-cart')}>Cart {props.value.cart.length}</Nav.Link>
