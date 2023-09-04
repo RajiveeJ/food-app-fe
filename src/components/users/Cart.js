@@ -12,7 +12,9 @@ function Cart() {
   let [total,setTotal]=useState(0)
   let [deliveryAddress,setDeliveryAddress] = useState("")
   let [contact,setContact] = useState("")
-  
+  let [Cardnumber,setCardnumber] = useState("")
+  let [Expiry,setExpiry] = useState("")
+  let [CVV,setCvv] = useState("")
 
   let navigate = useNavigate();
 
@@ -29,7 +31,10 @@ function Cart() {
       orderItems:context.cart,
       deliveryAddress,
       orderAmount:total,
-      contact
+      contact,
+      Cardnumber,
+      Expiry,
+      CVV
     },
     {
       headers:{"Authorization":`Bearer ${token}`}
@@ -62,10 +67,20 @@ function Cart() {
     <Form.Group className="mb-3">
       <Form.Control type="text"  placeholder="Contact Number" onChange={(e)=>setContact(e.target.value)}/>
     </Form.Group>
+  <Form.Group className="mb-3" >
+      <Form.Control type="text"  placeholder="Card number" onChange={(e)=>setCardnumber(e.target.value)}/>
+    </Form.Group>
+
+    <Form.Group className="mb-3">
+      <Form.Control type="text"  placeholder="mm/yy" onChange={(e)=>setExpiry(e.target.value)}/>
+    </Form.Group>
+    <Form.Group className="mb-3">
+      <Form.Control type="text"  placeholder="CVV" onChange={(e)=>setCvv(e.target.value)}/>
+    </Form.Group>
 
 
     <Button variant="primary" onClick={()=>handleOrder()}>
-      Submit
+      Paynow
     </Button>
     </Form>
     </div>
