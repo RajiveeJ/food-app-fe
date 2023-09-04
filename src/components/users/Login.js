@@ -62,7 +62,7 @@ function Login() {
         <Button variant="primary" onClick={()=>handleLogin()}>
           Submit
         </Button>
-            <p>admin@gmail.com|Admin@123,user@gmail.com|User@123</p>
+            <p>admin@gmail.com|admin123,demo@gmail.com|demo123</p>
       </Form>
       {toggle?<Spinner animation="border" variant="primary" />:<></>}
       {message?<div style={{"color":"red","textAlign":"center"}}>{message}</div>:<></>}
